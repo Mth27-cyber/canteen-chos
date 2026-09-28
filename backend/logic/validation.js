@@ -126,6 +126,7 @@ function releaseStock(items, menu) {
     if (!line) return dish;
     const stock = Number(dish.stock);
    if (isNaN(stock)) return dish;
+   // changed - to +
     return { ...dish, stock: dish.stock + line.qty };
   });
 }
