@@ -60,7 +60,10 @@ function alsoBought(dishId, orders, menu, limit = 3) {
 
     const otherId = a === id ? b : a;
     const dish = menu.find((d) => d.id === otherId);
-    if (dish) scored.push({ dish, count });
+    
+    if (dish && dish.orderable) {
+      scored.push({ dish, count });
+    }
   });
 
   scored.sort((x, y) => y.count - x.count || y.dish.rating - x.dish.rating);

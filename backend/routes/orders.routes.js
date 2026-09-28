@@ -153,10 +153,10 @@ router.post(
     };
 
     store.writeMenu(reserved.menu);
-
+// subtracts the coupon code uses
     if (bill.couponCode) {
       store.update('coupons', (list) =>
-        list.map((c) => (c.code === bill.couponCode ? { ...c, usesLeft: c.usesLeft } : c))
+        list.map((c) => (c.code === bill.couponCode ? { ...c, usesLeft: c.usesLeft-1 } : c))
       );
     }
 

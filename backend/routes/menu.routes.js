@@ -25,9 +25,11 @@ function decorate(dish, now, ratingRecords, counts) {
     ratingCount: record ? record.count : 0,
     orderCount: counts.get(dish.id) || 0,
     servedNow: availability.isServedNow(dish, now),
-    orderable: availability.isOrderable(dish, now),
+    // chnaged it
+    orderable: availability.isOrderable(dish,1, now),
     slotLabel: availability.slotLabel(dish.slot),
-    blockedReason: availability.blockedReason(dish, now),
+    // changed it
+    blockedReason: availability.blockedReason(dish,1, now),
   };
 }
 

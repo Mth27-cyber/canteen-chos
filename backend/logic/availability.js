@@ -5,12 +5,12 @@
 // The server clock decides all of this. The browser's clock is never trusted.
 
 const OPEN_FROM = 7 * 60;   // 07:00
-const OPEN_TO = 24 * 60;    // 24:00
+const OPEN_TO = 22 * 60;    // 22:00
 
 const SLOT_WINDOWS = {
   breakfast: { from: 7 * 60, to: 11 * 60 },
   lunch: { from: 11 * 60 + 30, to: 16 * 60 },
-  evening: { from: 16 * 60 + 30, to: 24 * 60 },
+  evening: { from: 16 * 60 + 30, to: 22 * 60 },
   allday: { from: OPEN_FROM, to: OPEN_TO },
 };
 
@@ -63,10 +63,14 @@ function isServedNow(dish, date = new Date()) {
 }
 
 /** In its slot, in stock, and not switched off by staff. */
-function isOrderable(dish, date = new Date()) {
+function isOrderable(dish, qty=1, date = new Date()) {
   if (!dish) return false;
   if (dish.disabled === true) return false;
-  return isServedNow(dish, date) && Number(dish.stock) > 0;
+  if (!isServedNow(dish, date)) return false;
+  if (Number(dish.stock) > 0 && Number(dish.stock) < qty) return false;
+  
+  return true;
+
 }
 
 function formatMinutes(total) {
@@ -84,11 +88,14 @@ function slotLabel(slot) {
 }
 
 /** Why can't I order this? Returns null when it is orderable. */
-function blockedReason(dish, date = new Date()) {
+function blockedReason(dish,qty=1, date = new Date()) {
   if (!isCanteenOpen(date)) return 'The canteen is closed';
   if (dish.disabled) return 'Taken off the menu today';
-  if (Number(dish.stock) <= 0) return 'Sold out';
   if (!isServedNow(dish, date)) return slotLabel(dish.slot);
+ const stock = Number(dish.stock);
+ if (!isNaN(stock) && stock < qty) {
+  return stock <= 0 ? 'Sold out' : `Only ${stock} left`;
+}
   return null;
 }
 
