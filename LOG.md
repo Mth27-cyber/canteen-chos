@@ -33,6 +33,8 @@ in menu.routes.js added parameter qty for checking quantity
  I have set limit of samosa to 2 and try to order3 but now it will show error
 **Time:**
 about 2 hrs chceking and debugging files and one after other i was getting erros like all items got sold out the condition of stock when stock is 2 i was able to order3 after that i hve checked most files then do the necessary changes
+
+
 ## CC-07 — "Cancelling makes it worse"
 
 **Reproduced:**
@@ -48,3 +50,19 @@ in validation.js in release notes i have changed - to + such that when order get
  I have ordered samosa and then cancelledit the qty goes back to stock
 **Time:**
 about 10 minutes as  i have corrected it previous commit while debugging the CC-06 Problem
+
+## CC-09 — "Cancelling makes it worse"
+
+**Reproduced:**
+"A student cancelled an order and the number of plates we have left went down again instead of coming back. Do that a few times and the system thinks we have none left when the kitchen is full"
+
+**Cause:**
+in pagination function we were returing list so repeated items were there
+
+**Fix:**
+in search.js in pagination function i have returned items 
+
+**Checked:**
+checked that there are only 37 items which are mentioned in menu
+**Time:**
+about 20 minutes as  i was firstly looking for CC-10 but found CC-09 during debugging the search.js

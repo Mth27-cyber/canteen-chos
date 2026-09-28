@@ -85,9 +85,17 @@ const SORTERS = {
   default: (a, b) => Number(b.orderable) - Number(a.orderable) || a.id - b.id,
 };
 
+// CHANGED THE sort function to sort by price ascending and descending, and added a default sorter that prioritizes orderable dishes first, then sorts by id.
 function sortDishes(dishes, sort) {
-  const fn = SORTERS[sort] || SORTERS.default;
-  return dishes.slice().sort(fn);
+  const sorted = dishes.slice();
+  if (sort === 'price_asc') {
+    sorted.sort((a, b) => a.price - b.price || a.id - b.id); 
+  } 
+  else if (sort === 'price_desc') {
+    sorted.sort((a, b) => b.price - a.price || a.id - b.id); 
+  }
+  
+  return sorted;
 }
 
 /** Cut a list into one page and say whether there is another. */
@@ -98,7 +106,7 @@ function paginate(list, page = 1, limit = 12) {
   const items = list.slice(start, start + perPage);
 
   return {
-    items: list,
+    items: items,
     page: pageNum,
     limit: perPage,
     total: list.length,
